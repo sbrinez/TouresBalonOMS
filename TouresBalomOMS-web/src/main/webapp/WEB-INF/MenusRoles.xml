@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MenusRoles>
+    <Rol nombre="PRODUCTOS_CONSULTA">
+        <Menus>
+            <Menu nombre="Productos">
+                <!--Esta opcion hace referencia a las busquedas por codigo, nombre y descrpcion del caso de uso 3.2-->
+                <OpcionMenu nombre="Buscar productos" urlDestino="/productos/buscar_productos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de productos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Productos más vendidos" urlDestino="/productos/productos_mas_vendidos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de espectaculos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Tipos de espectaculo más vendidos" urlDestino="/productos/tipos_espectaculo_mas_vendidos.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>
+    </Rol>
+    <Rol nombre="PRODUCTOS_ADMINISTRACION">
+        <Menus>
+            <Menu nombre="Productos">
+                <!-- Caso de uso 3.1 -->
+                <OpcionMenu nombre="Crear producto" urlDestino="/productos/crear_producto.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia a las busquedas por codigo, nombre y descrpcion del caso de uso 3.2-->
+                <OpcionMenu nombre="Buscar productos" urlDestino="/productos/buscar_productos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de productos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Productos más vendidos" urlDestino="/productos/productos_mas_vendidos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de espectaculos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Tipos de espectaculo más vendidos" urlDestino="/productos/tipos_espectaculo_mas_vendidos.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>
+    </Rol>
+    <Rol nombre="CAMPANIAS">
+        <Menus>
+            <Menu nombre="Campañas">
+                <!-- Caso de uso 3.3 -->
+                <OpcionMenu nombre="Crear campaña" urlDestino="/campanias/crear_campania.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.3 -->
+                <OpcionMenu nombre="Consultar campañas" urlDestino="/campanias/consultar_campanias.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>
+    </Rol>
+    <Rol nombre="ORDENES_CONSULTA">
+        <Menus>
+            <Menu nombre="Ordenes">
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Buscar órdenes" urlDestino="/ordenes/buscar_ordenes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes cerradas" urlDestino="/ordenes/ordenes_cerradas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes abiertas" urlDestino="/ordenes/ordenes_abiertas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes de mayor facturación" urlDestino="/ordenes/ordenes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>        
+    </Rol>
+    <Rol nombre="ORDENES_ADMINISTRACION">
+        <Menus>
+            <Menu nombre="Ordenes">
+                <!-- Caso de uso 3.4 -->
+                <OpcionMenu nombre="Cancelar orden" urlDestino="/ordenes/cancelar_orden.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Buscar órdenes" urlDestino="/ordenes/consultar_ordenes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes cerradas" urlDestino="/ordenes/ordenes_cerradas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes abiertas" urlDestino="/ordenes/ordenes_abiertas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes de mayor facturación" urlDestino="/ordenes/ordenes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>        
+    </Rol>
+    <Rol nombre="CLIENTES_CONSULTA">
+        <Menus>
+            <Menu nombre="Clientes">
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Buscar clientes" urlDestino="/clientes/buscar_clientes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Clientes de mayor facturación" urlDestino="/clientes/clientes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>         
+    </Rol>
+    <Rol nombre="CLIENTES_ADMINISTRACION">
+        <Menus>
+            <Menu nombre="Clientes">
+                <!-- Caso de uso 3.6 -->
+                <OpcionMenu nombre="Crear cliente" urlDestino="/clientes/crear_cliente.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Buscar clientes" urlDestino="/clientes/buscar_clientes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Clientes de mayor facturación" urlDestino="/clientes/clientes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>         
+    </Rol>
+    <Rol nombre="SUPER_USER">
+        <Menus>
+            <Menu nombre="Productos">
+                <!-- Caso de uso 3.1 -->
+                <OpcionMenu nombre="Crear producto" urlDestino="/productos/crear_producto.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia a las busquedas por codigo, nombre y descrpcion del caso de uso 3.2-->
+                <OpcionMenu nombre="Buscar productos" urlDestino="/productos/buscar_productos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de productos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Productos más vendidos" urlDestino="/productos/productos_mas_vendidos.xhtml"></OpcionMenu>
+                <!--Esta opcion hace referencia al ranking de espectaculos más vendidos del caso de uso 3.2-->
+                <OpcionMenu nombre="Tipos de espectaculo más vendidos" urlDestino="/productos/tipos_espectaculo_mas_vendidos.xhtml"></OpcionMenu>
+            </Menu>
+            <Menu nombre="Campañas">
+                <!-- Caso de uso 3.3 -->
+                <OpcionMenu nombre="Crear campaña" urlDestino="/campanias/crear_campania.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.3 -->
+                <OpcionMenu nombre="Consultar campañas" urlDestino="/campanias/consultar_campanias.xhtml"></OpcionMenu>
+            </Menu>            
+            <Menu nombre="Ordenes">
+                <!-- Caso de uso 3.4 -->
+                <OpcionMenu nombre="Cancelar orden" urlDestino="/ordenes/cancelar_orden.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Buscar órdenes" urlDestino="/ordenes/consultar_ordenes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes cerradas" urlDestino="/ordenes/ordenes_cerradas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes abiertas" urlDestino="/ordenes/ordenes_abiertas.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.5 -->
+                <OpcionMenu nombre="Ordenes de mayor facturación" urlDestino="/ordenes/ordenes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>            
+            <Menu nombre="Clientes">
+                <!-- Caso de uso 3.6 -->
+                <OpcionMenu nombre="Crear cliente" urlDestino="/clientes/crear_cliente.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Buscar clientes" urlDestino="/clientes/buscar_clientes.xhtml"></OpcionMenu>
+                <!-- Caso de uso 3.7 -->
+                <OpcionMenu nombre="Clientes de mayor facturación" urlDestino="/clientes/clientes_mayor_facturacion.xhtml"></OpcionMenu>
+            </Menu>
+        </Menus>         
+    </Rol>    
+    
+</MenusRoles>

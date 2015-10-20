@@ -9,5 +9,7 @@
   <modules>
     <module>TouresBalonOMS-ear</module>
     <module>TouresBalonOMS-ejb</module>
+    <module>TouresBalomOMS-web</module>
+    <module>TouresBalonOMS-model</module>
   </modules>
 </project>

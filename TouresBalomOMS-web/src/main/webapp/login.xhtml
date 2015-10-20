@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>TouresBalon-OMS</title>
+        </f:facet>
+    </h:head>
+    <h:body>
+            <h:form>
+                <p:layout fullPage="true">
+                    <p:layoutUnit position="center" size="175" header="Sistema de Gestión de Ordenes" collapsible="false" >
+                        
+                        <p:panelGrid id="grid" columns="3" layout="grid" >
+                            
+                            <h:outputLabel value="Nombre de usuario" for="usernameField"/>
+                            <p:inputText id="usernameField" label="Nombre de usuario" size="20" 
+                                         requiredMessage="Este campo es requerido"
+                                         required="true" value="#{loginAction.username}"/>
+                            <p:message for="usernameField"/>
+
+                            <h:outputLabel value="Contraseña" for="passwordField"/>
+                            <p:password id="passwordField" label="Contraseña" size="20" 
+                                        required="true" value="#{loginAction.password}"
+                                        requiredMessage="Este campo es requerido"/>
+                            <p:message for="passwordField"/>
+                            <p:spacer/>
+                            <p:commandButton value="Ingresar" action="#{loginAction.login()}" update="grid"/>
+
+                        </p:panelGrid>
+
+                    </p:layoutUnit>
+                </p:layout>
+            </h:form>
+    </h:body>
+</html>
