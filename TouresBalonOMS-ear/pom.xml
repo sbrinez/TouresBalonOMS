@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>TouresBalonOMS</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>TouresBalonOMS</artifactId>
+        <groupId>com.touresbalon.oms</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <groupId>com.touresbalon.oms</groupId>
+    <artifactId>TouresBalonOMS-ear</artifactId>
     <version>1.0-SNAPSHOT</version>
-  </parent>
+    <packaging>ear</packaging>
 
-  <groupId>com.touresbalon.oms</groupId>
-  <artifactId>TouresBalonOMS-ear</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>ear</packaging>
+    <name>TouresBalonOMS-ear</name>
 
-  <name>TouresBalonOMS-ear</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-ear-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-            <version>6</version>
-            <defaultLibBundleDir>lib</defaultLibBundleDir>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <version>6</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <fileNameMapping>no-version</fileNameMapping>
+                    <modules>
+                        <webModule>
+                            <groupId>com.touresbalon.oms</groupId>
+                            <artifactId>TouresBalonOMS-web</artifactId>
+                            <contextRoot>/TouresBalonOMS</contextRoot>
+                        </webModule>
+                    </modules>  			
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>${project.name}</finalName>
+    </build>
     <dependencies>
         <dependency>
             <groupId>com.touresbalon.oms</groupId>
@@ -47,5 +56,11 @@
             <version>1.0-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
+        <dependency>
+            <groupId>com.touresbalon.oms</groupId>
+            <artifactId>TouresBalonOMS-web</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>		
     </dependencies>
 </project>

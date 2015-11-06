@@ -1,17 +1,11 @@
 package com.touresbalon.oms.action;
 
 import com.touresbalon.oms.model.ProductoDTO;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.touresbalon.oms.proxy.ProductosProxy;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ConversationScoped;
 import javax.inject.Named;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 /**
@@ -28,31 +22,34 @@ public class BuscarProductosAction implements Serializable {
     private String criterioBusqueda;
     
     private List<ProductoDTO> listaProductos;
-
     
-    @PostConstruct
+    private ProductoDTO productoSeleccionado;
+    
+    
+    public BuscarProductosAction() {
+        System.out.println("Constructor BuscarProductosAction");
+    } 
+    
+        
     public void buscarProductos() {
         //
         //Llamar servicio de busqueda de productos para llenar listaProductos
-        foto = null;
         try { // Call Web Service Operation
-//            com.touresbalon.oms.client.NewSessionBean port = service.getNewSessionBeanPort();
-//            // TODO process result here
-//            java.util.List<com.touresbalon.oms.client.ProductoDTO> resultSet = port.consultarProductos();
-//            
-//            System.out.println("Result = "+resultSet);
-//            for (com.touresbalon.oms.client.ProductoDTO result : resultSet) {
-//                ProductoDTO productoDTO = new ProductoDTO();
-//                productoDTO.setNombreProducto(result.getNombreProducto());
-//                FileInputStream fis = new FileInputStream("C:\\Users\\Familia\\Pictures\\80852955.jpg");
-//                foto = new DefaultStreamedContent(new ByteArrayInputStream(result.getFotoProducto()));
-//            }            
+            
+            listaProductos = ProductosProxy.getInstance().consultarProductos();
          
         } catch (Exception ex) {
             ex.printStackTrace();
             // TODO handle custom exceptions here
         }
 
+    }
+    
+    public void consultarDetalleProducto() {
+        
+        //No se asigna porque no está retornando nada pero esa es la idea cuando
+        //este implementado el WS
+        ProductosProxy.getInstance().consultarProducto(productoSeleccionado.getCodigoProducto());
     }
 
     /**
@@ -95,6 +92,20 @@ public class BuscarProductosAction implements Serializable {
      */
     public void setFoto(StreamedContent foto) {
         this.foto = foto;
+    }
+
+    /**
+     * @return the productoSeleccionado
+     */
+    public ProductoDTO getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    /**
+     * @param productoSeleccionado the productoSeleccionado to set
+     */
+    public void setProductoSeleccionado(ProductoDTO productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
     }
     
 }

@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>TouresBalonOMS</artifactId>
-    <groupId>com.touresbalon.oms</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+        <artifactId>TouresBalonOMS</artifactId>
+        <groupId>com.touresbalon.oms</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
     <groupId>com.touresbalon.oms</groupId>
-    <artifactId>TouresBalomOMS-web</artifactId>
+    <artifactId>TouresBalonOMS-web</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>TouresBalomOMS-web</name>
+    <name>TouresBalonOMS-web</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -20,6 +20,26 @@
     </properties>
     
     <dependencies>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>v2-rev130-1.18.0-rc</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client-jackson2</artifactId>
+            <version>1.20.0</version>
+        </dependency>  
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-java6</artifactId>
+            <version>1.20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.oauth-client</groupId>
+            <artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.20.0</version>
+        </dependency>                      
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -91,6 +111,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>${project.name}</finalName>
     </build>
     <repositories>
         <repository>

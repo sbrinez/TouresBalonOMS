@@ -3,6 +3,7 @@ package com.touresbalon.oms.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ProductoDTO implements Serializable {
     
     private String descripcionProducto;
     
-    private byte[] fotoProducto;
+    private String urlFoto;
     
     private Calendar fechaEspectaculo;
     
@@ -35,6 +36,13 @@ public class ProductoDTO implements Serializable {
     private BigDecimal valorTotal;
     
     private String tipoEspectaculo;
+    
+    /**
+     * @return the fechaEspectaculo
+     */
+    public Date obtenerFechaEspectaculoDate() {
+        return fechaEspectaculo.getTime();
+    }    
 
     /**
      * @return the codigoProducto
@@ -79,17 +87,17 @@ public class ProductoDTO implements Serializable {
     }
 
     /**
-     * @return the fotoProducto
+     * @return the urlFoto
      */
-    public byte[] getFotoProducto() {
-        return fotoProducto;
+    public String getUrlFoto() {
+        return urlFoto;
     }
 
     /**
-     * @param fotoProducto the fotoProducto to set
+     * @param urlFoto the urlFoto to set
      */
-    public void setFotoProducto(byte[] fotoProducto) {
-        this.fotoProducto = fotoProducto;
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
     }
 
     /**

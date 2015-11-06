@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Búsqueda de productos</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:layout fullPage="false">
+                <p:layoutUnit position="center" size="175" header="Búsqueda de productos" collapsible="false" >
+
+                    <p:panelGrid id="grid" columns="2" layout="grid" >
+
+                        <h:outputLabel value="Buscar productos" for="productosField" />
+                        <p:inputText id="productosField" value="#{buscarProductosAction.criterioBusqueda}" />
+
+                        <p:spacer/>
+                        <p:commandButton value="Buscar" action="#{buscarProductosAction.buscarProductos()}" update="grid"/>
+
+                        <p:graphicImage value="#{buscarProductosAction.foto}"/>
+
+                    </p:panelGrid>            
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center" size="175" header="Resultados de la búsqueda" collapsible="false" >
+                    <p:dataGrid value="#{buscarProductosAction.listaProductos}" var="producto"
+                                columns="4" rows="10" layout="grid">
+
+                        <f:facet name="header">
+                            Resultados de la búsqueda de productos
+                        </f:facet>
+
+                        <p:panel header="#{producto.nombreProducto}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                
+                                <p:graphicImage name="#{producto.urlFoto}" /> 
+
+                                <h:outputText value="#{producto.ciudadDestino}" />
+                                <h:outputText value="#{producto.fechaEspectaculo}" />
+
+                                <p:commandLink update=":form:carDetail" title="Ver detalle del producto" 
+                                               action="#{buscarProductosAction.consultarDetalleProducto()}">
+                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                    <f:setPropertyActionListener value="#{producto}" target="#{buscarProductosAction.productoSeleccionado}" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                        </p:panel>                        
+
+                    </p:dataGrid>
+                </p:layoutUnit>
+
+            </p:layout>
+        </h:form>
+    </h:body>
+</html>
+
