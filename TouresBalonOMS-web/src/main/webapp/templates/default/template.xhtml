@@ -20,7 +20,11 @@
             <h:outputScript name="bootstrap/js/bootstrap.js" />
         </f:facet>
     </h:head>
-
+    <style type="text/css">
+    .ui-widget,.ui-widget .ui-widget {
+    font-size: 95% !important;
+    }
+    </style>
     <h:body>
         <ui:include src="header.xhtml" />
         <ui:include src="content.xhtml" />

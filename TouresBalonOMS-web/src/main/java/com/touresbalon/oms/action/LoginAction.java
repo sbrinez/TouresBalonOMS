@@ -5,6 +5,9 @@ import com.touresbalon.oms.menu.MenuDTO;
 import com.touresbalon.oms.menu.MenuItemDTO;
 import com.touresbalon.oms.security.AuthenticatorDelegate;
 import com.touresbalon.oms.security.UserTO;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
@@ -22,6 +25,8 @@ public class LoginAction {
     private String username;
     
     private String password;
+    
+    private String menuHtml;
 
     /**
      * Creates a new instance of LoginAction
@@ -37,12 +42,18 @@ public class LoginAction {
             HttpServletRequest request = (HttpServletRequest) ec.getRequest();            
             UserTO usuario = AuthenticatorDelegate.getUserTO(username, request);
             request.getSession().setAttribute("USERNAME", usuario);
+            construirMenuHtml();
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("productos/buscar_productos.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(LoginAction.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return "EXITO";
         }
         return null;
     }
     
-    public String construirMenuHtml() {
+    private void construirMenuHtml() {
         FacesContext ctx = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest)ctx.getExternalContext().getRequest();
         UserTO userTO = (UserTO) request.getSession().getAttribute("USERNAME");
@@ -57,8 +68,9 @@ public class LoginAction {
                 sb.append("<b class=\"caret\"></b></a>");
                 sb.append("<ul class=\"dropdown-menu\">");
                 for (MenuItemDTO menuItemDTO : menuDTO.getItems()) {
-                    sb.append("<li><a href=\"");
+                    sb.append("<li><a href=\"#\" onclick=\"redirect('");
                     sb.append(menuItemDTO.getUrlDestino());
+                    sb.append("');return false;");
                     sb.append("\">");
                     sb.append(menuItemDTO.getNombre());
                     sb.append("</a></li>");
@@ -67,9 +79,8 @@ public class LoginAction {
                 sb.append("</li>");
                 sb.append("</ul>");
             }
-            return sb.toString();
+            menuHtml = sb.toString();
         }
-        return null;
     }    
 
     /**
@@ -98,6 +109,20 @@ public class LoginAction {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the menuHtml
+     */
+    public String getMenuHtml() {
+        return menuHtml;
+    }
+
+    /**
+     * @param menuHtml the menuHtml to set
+     */
+    public void setMenuHtml(String menuHtml) {
+        this.menuHtml = menuHtml;
     }
     
 }
