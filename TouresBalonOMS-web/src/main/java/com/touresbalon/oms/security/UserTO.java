@@ -2,7 +2,6 @@ package com.touresbalon.oms.security;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 
@@ -19,7 +18,7 @@ public class UserTO implements Serializable {
     
     private String email;
     
-    private List<String> perfiles; 
+    private String perfil; 
 
     /**
      * @return the nombre
@@ -92,17 +91,17 @@ public class UserTO implements Serializable {
     }
 
     /**
-     * @return the perfiles
+     * @return the perfil
      */
-    public List<String> getPerfiles() {
-        return perfiles;
+    public String getPerfil() {
+        return perfil;
     }
 
     /**
-     * @param perfiles the perfiles to set
+     * @param perfil the perfil to set
      */
-    public void setPerfiles(List<String> perfiles) {
-        this.perfiles = perfiles;
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
     }
     
 }

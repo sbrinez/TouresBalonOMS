@@ -1,29 +1,40 @@
 package com.touresbalon.oms.action;
 
-import com.touresbalon.oms.model.ProductoDTO;
-import com.touresbalon.oms.proxy.ProductosProxy;
 import java.io.Serializable;
 import java.util.List;
-import javax.enterprise.context.ConversationScoped;
-import javax.inject.Named;
-import org.primefaces.model.StreamedContent;
+
+//import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+//import javax.inject.Named;
+
+import com.touresbalon.oms.constant.ConstantesMensajesKey;
+import com.touresbalon.oms.constant.ConstantesResourcesBundle;
+
+import com.touresbalon.oms.model.ProductoDTO;
+import com.touresbalon.oms.proxy.ProductosProxy;
+import org.primefaces.context.RequestContext;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author SergioDavid
  */
-@Named("buscarProductosAction")
-@ConversationScoped
-public class BuscarProductosAction implements Serializable {
+@javax.faces.bean.ManagedBean(name = "buscarProductosAction")
+@javax.faces.bean.ViewScoped
+public class BuscarProductosAction extends AbstractAction implements Serializable {
 
-    
-    private StreamedContent foto;
     
     private String criterioBusqueda;
     
     private List<ProductoDTO> listaProductos;
     
     private ProductoDTO productoSeleccionado;
+    
+    private boolean modalVisible;
+    
+    private UploadedFile archivoImagen;
+    
+    private String mensajeError;
     
     
     public BuscarProductosAction() {
@@ -36,13 +47,12 @@ public class BuscarProductosAction implements Serializable {
         //Llamar servicio de busqueda de productos para llenar listaProductos
         try { // Call Web Service Operation
             
-            listaProductos = ProductosProxy.getInstance().consultarProductos();
-         
+            listaProductos = ProductosProxy.getInstance().consultarProductos();            
+            
         } catch (Exception ex) {
             ex.printStackTrace();
             // TODO handle custom exceptions here
         }
-
     }
     
     public void consultarDetalleProducto() {
@@ -50,6 +60,28 @@ public class BuscarProductosAction implements Serializable {
         //No se asigna porque no está retornando nada pero esa es la idea cuando
         //este implementado el WS
         ProductosProxy.getInstance().consultarProducto(productoSeleccionado.getCodigoProducto());
+        modalVisible = true;
+    }
+    
+    /**En este momento este metodo no se esta llamando desde ninguna parte*/
+    public void inicializarProductoDTO() {
+        System.out.println("Reinicializando ProductoDTO");
+        productoSeleccionado = new ProductoDTO();            
+    }
+    
+    public void actualizarProducto() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                obtenerMensaje(ConstantesResourcesBundle.MENSAJES,
+                        ConstantesMensajesKey.GENERAL_MENSAJE_CONFIRMACION),
+                obtenerMensaje(ConstantesResourcesBundle.MENSAJES,
+                        ConstantesMensajesKey.GENERAL_REGISTRO_ACTUALIZADO));
+        RequestContext.getCurrentInstance().showMessageInDialog(message);        
+        System.out.println("Actualizando producto");
+    }
+    
+    public void eliminarProducto() {
+        System.out.println("Eliminando producto");
+        listaProductos.remove(productoSeleccionado);
     }
 
     /**
@@ -81,20 +113,6 @@ public class BuscarProductosAction implements Serializable {
     }
 
     /**
-     * @return the foto
-     */
-    public StreamedContent getFoto() {
-        return foto;
-    }
-
-    /**
-     * @param foto the foto to set
-     */
-    public void setFoto(StreamedContent foto) {
-        this.foto = foto;
-    }
-
-    /**
      * @return the productoSeleccionado
      */
     public ProductoDTO getProductoSeleccionado() {
@@ -106,6 +124,48 @@ public class BuscarProductosAction implements Serializable {
      */
     public void setProductoSeleccionado(ProductoDTO productoSeleccionado) {
         this.productoSeleccionado = productoSeleccionado;
+    }
+
+    /**
+     * @return the modalVisible
+     */
+    public boolean isModalVisible() {
+        return modalVisible;
+    }
+
+    /**
+     * @param modalVisible the modalVisible to set
+     */
+    public void setModalVisible(boolean modalVisible) {
+        this.modalVisible = modalVisible;
+    }
+
+    /**
+     * @return the archivoImagen
+     */
+    public UploadedFile getArchivoImagen() {
+        return archivoImagen;
+    }
+
+    /**
+     * @param archivoImagen the archivoImagen to set
+     */
+    public void setArchivoImagen(UploadedFile archivoImagen) {
+        this.archivoImagen = archivoImagen;
+    }
+
+    /**
+     * @return the mensajeError
+     */
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    /**
+     * @param mensajeError the mensajeError to set
+     */
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
     }
     
 }

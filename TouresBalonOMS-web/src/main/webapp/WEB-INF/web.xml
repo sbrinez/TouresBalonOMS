@@ -12,7 +12,7 @@
     </context-param>
     <context-param>  
         <param-name>primefaces.THEME</param-name>  
-        <param-value>hot-sneaks</param-value>  
+        <param-value>rocket</param-value>  
     </context-param>     
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/default/template.xhtml">
+    <ui:define name="content">
+        <h:form id="form">
+            <h:panelGroup>
+                <p:panel style="text-align: left; text-spacing:normal; border:none;">
+                    <h4>
+                        <p:outputLabel value="Tipos de espectáculo más vendidos"/>
+                    </h4>                    
+                </p:panel>
+                <h:panelGroup id="panelFechas">
+                    <p:panelGrid columns="5" styleClass="companyHeaderGrid">
+                        <p:outputLabel value="Fecha inicial:" for="fechaInicialField"/>
+                        <p:calendar id="fechaInicialField" value="#{tiposEspectaculoMasVendidosAction.fechaInicialBusqueda}" 
+                                    required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button" 
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                        <p:outputLabel value="Fecha inicial:" for="fechaFinalField"/>
+                        <p:calendar id="fechaFinalField" value="#{tiposEspectaculoMasVendidosAction.fechaFinalBusqueda}" 
+                                    required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                        <p:commandButton value="#{mensajes['general.consultar']}" update="panelFechas, tablaResultados" 
+                                         action="#{tiposEspectaculoMasVendidosAction.consultarTiposEspectaculosMasVendidos()}"/>
+                    </p:panelGrid>
+                </h:panelGroup>
+                <br/>
+                <p:panel id="panelResultados" style="width: 60%">
+                    <p:dataTable id="tablaResultados" value="#{tiposEspectaculoMasVendidosAction.listaTiposEspectaculo}" 
+                                 var="espectaculo" emptyMessage="#{mensajes['general.sinResultados']}">
+                        <p:column headerText="Tipo de espectáculo" style="font-size: 12px" width="35%">
+                            <h:outputText value="#{espectaculo.tipoEspectaculo}"/>
+                        </p:column>
+                        <p:column headerText="Número de ventas" style="font-size:12px" width="30%">
+                            <h:outputText value="#{espectaculo.numeroVentas}" style="float:right"/>
+                        </p:column>
+                        <p:column headerText="Valor total" style="font-size:12px" width="35%">
+                            <h:outputText value="#{espectaculo.totalFacturado}" style="float:right">
+                                <f:convertNumber type="currency" currencyCode="COP" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>  
+

@@ -19,11 +19,11 @@ public class ProductoDTO implements Serializable {
     
     private String urlFoto;
     
-    private Calendar fechaEspectaculo;
+    private Date fechaEspectaculo;
     
-    private Calendar fechaLlegada;
+    private Date fechaLlegada;
     
-    private Calendar fechaSalida;
+    private Date fechaSalida;
     
     private String ciudadOrigen;
     
@@ -33,16 +33,11 @@ public class ProductoDTO implements Serializable {
     
     private BigDecimal valorTransporte;
     
+    private BigDecimal valorHospedaje;
+    
     private BigDecimal valorTotal;
     
-    private String tipoEspectaculo;
-    
-    /**
-     * @return the fechaEspectaculo
-     */
-    public Date obtenerFechaEspectaculoDate() {
-        return fechaEspectaculo.getTime();
-    }    
+    private String tipoEspectaculo;  
 
     /**
      * @return the codigoProducto
@@ -103,42 +98,42 @@ public class ProductoDTO implements Serializable {
     /**
      * @return the fechaEspectaculo
      */
-    public Calendar getFechaEspectaculo() {
+    public Date getFechaEspectaculo() {
         return fechaEspectaculo;
     }
 
     /**
      * @param fechaEspectaculo the fechaEspectaculo to set
      */
-    public void setFechaEspectaculo(Calendar fechaEspectaculo) {
+    public void setFechaEspectaculo(Date fechaEspectaculo) {
         this.fechaEspectaculo = fechaEspectaculo;
     }
 
     /**
      * @return the fechaLlegada
      */
-    public Calendar getFechaLlegada() {
+    public Date getFechaLlegada() {
         return fechaLlegada;
     }
 
     /**
      * @param fechaLlegada the fechaLlegada to set
      */
-    public void setFechaLlegada(Calendar fechaLlegada) {
+    public void setFechaLlegada(Date fechaLlegada) {
         this.fechaLlegada = fechaLlegada;
     }
 
     /**
      * @return the fechaSalida
      */
-    public Calendar getFechaSalida() {
+    public Date getFechaSalida() {
         return fechaSalida;
     }
 
     /**
      * @param fechaSalida the fechaSalida to set
      */
-    public void setFechaSalida(Calendar fechaSalida) {
+    public void setFechaSalida(Date fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
@@ -224,6 +219,20 @@ public class ProductoDTO implements Serializable {
      */
     public void setTipoEspectaculo(String tipoEspectaculo) {
         this.tipoEspectaculo = tipoEspectaculo;
+    }
+
+    /**
+     * @return the valorHospedaje
+     */
+    public BigDecimal getValorHospedaje() {
+        return valorHospedaje;
+    }
+
+    /**
+     * @param valorHospedaje the valorHospedaje to set
+     */
+    public void setValorHospedaje(BigDecimal valorHospedaje) {
+        this.valorHospedaje = valorHospedaje;
     }
     
 }

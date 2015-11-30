@@ -3,21 +3,36 @@
               xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
-    <application>
-    </application>
     
-    <navigation-rule>
-        <from-view-id>/login.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>EXITO</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>    
-    <navigation-rule>
-        <from-view-id>/productos/buscar_productos.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>DETALLE</from-outcome>
-            <to-view-id>/productos/detalle_producto.xhtml</to-view-id>
-        </navigation-case>
-    </navigation-rule>    
+    <application>
+        <resource-bundle>
+            <base-name>mensajes.messages</base-name>
+            <var>mensajes</var>
+        </resource-bundle>        
+    </application>
+    <application>
+        <resource-bundle>
+            <base-name>mensajes.productos_msgs</base-name>
+            <var>mensajesProductos</var>
+        </resource-bundle>        
+    </application>
+    <application>
+        <resource-bundle>
+            <base-name>mensajes.campanias_msgs</base-name>
+            <var>mensajesCampanias</var>
+        </resource-bundle>        
+    </application>
+    <application>
+        <resource-bundle>
+            <base-name>mensajes.clientes_msgs</base-name>
+            <var>mensajesClientes</var>
+        </resource-bundle>        
+    </application>
+    <application>
+        <resource-bundle>
+            <base-name>mensajes.ordenes_msgs</base-name>
+            <var>mensajesOrdenes</var>
+        </resource-bundle>        
+    </application>
+        
 </faces-config>

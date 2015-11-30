@@ -2,7 +2,6 @@ package com.touresbalon.oms.security;
 
 import com.touresbalon.oms.cache.CacheResourceLoader;
 import com.touresbalon.oms.menu.BarraMenusDTO;
-import java.util.Arrays;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,16 +23,16 @@ public class AuthenticatorDelegate {
         userTO.setEmail(username);
         userTO.setUltimoAcceso(new Date());
         userTO.setIpOrigen(request.getRemoteAddr());
-        userTO.setPerfiles(Arrays.asList("SUPER_USER"));
+        userTO.setPerfil("SUPER_USER");
         return userTO;
     }
     
     
     public static BarraMenusDTO construirMenu(UserTO userTO) {
         
-        if (userTO.getPerfiles() != null) {
-            //Por ahora se asume que cada usuario únicamente tiene un rol
-            return CacheResourceLoader.getRolesMenus().get(userTO.getPerfiles().get(0));
+        if (userTO.getPerfil() != null) {
+            //Se asume que cada usuario únicamente tiene un rol
+            return CacheResourceLoader.getRolesMenus().get(userTO.getPerfil());
         }
         return null;
     }

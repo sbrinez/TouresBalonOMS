@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+    <ui:define name="content">   
+        
+        <h:form id="formBusqueda">
+            <h:panelGroup>
+                <p:panel style="text-align:left; border:none;">
+                    <h4>
+                        <p:outputLabel value="Consulta de órdenes de compra"/>
+                    </h4>                    
+                </p:panel>
+                <p:panel style="text-align:left; border:none; width: 80%">
+                    <p:panelGrid columns="2" styleClass="companyHeaderGrid">
+                        <p:outputLabel value="Número de orden:" for="numIdBusqueda"/>
+                        <p:inputText id="numIdBusqueda" 
+                                     value="#{buscarOrdenesAction.numeroOrdenBusqueda}">
+                            <pe:keyFilter mask="num"/>
+                        </p:inputText>
+                        <p:outputLabel value="Producto contenido:" for="codigoProductoBusqueda"/>
+                        <p:inputText id="codigoProductoBusqueda" 
+                                     value="#{buscarOrdenesAction.codigoProductoBusqueda}">
+                            <pe:keyFilter mask="num"/>
+                        </p:inputText>                        
+                    </p:panelGrid>
+                    <p:panel style="text-align:right; border:none;">
+                        <p:commandButton value="#{mensajes['general.buscar']}" 
+                                         action="#{buscarOrdenesAction.buscarOrdenes()}" 
+                                         update="form:panelResultados"/>
+                    </p:panel> 
+                </p:panel>
+            </h:panelGroup>           
+        </h:form>
+
+        <h:form id="form">
+            <h:panelGroup>
+                <p:panel id="panelResultados" style="width: 80%; border:none;">
+                    <p:dataTable id="tablaResultados" value="#{buscarOrdenesAction.listaOrdenes}" var="orden" 
+                                 emptyMessage="#{mensajes['general.sinResultados']}">
+                        <p:column headerText="Número" style="font-size:12px" width="15%">
+                            <h:outputText value="#{orden.codigoOrden}" style="float:right"/>
+                        </p:column>
+                        <p:column headerText="Fecha" style="font-size: 12px" width="15%">
+                            <h:outputText value="#{orden.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Cliente" style="font-size: 12px" width="30%">
+                            <h:outputText value="#{orden.clienteDTO.obtenerNombreCompleto()}"
+                                          rendered="#{orden.clienteDTO != null}"/>
+                        </p:column>
+                        <p:column headerText="Estado" style="font-size: 12px" width="15%">
+                            <h:outputText value="#{orden.estado}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Valor total" style="font-size:12px" width="15%">
+                            <h:outputText value="#{orden.calcularValorTotal()}" style="float:right">
+                                <f:convertNumber type="currency" currencyCode="COP" />
+                            </h:outputText>  
+                        </p:column>
+                        <p:column headerText="Detalles" style="text-align:center; font-size:12px" width="10%">
+                            <p:commandLink onclick="PF('modalDetalle').show()" update="form2:panelControlesDetalle">
+                                <f:setPropertyActionListener value="#{orden}" target="#{buscarOrdenesAction.ordenSeleccionada}" />
+                                <p:graphicImage value="/resources/images/detalles.png" height="16" width="16" />
+                            </p:commandLink>                      
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form id="form2">
+            <p:dialog dynamic="true" id="modalDetalle" header="Detalle de la orden" 
+                      widgetVar="modalDetalle" modal="true" position="center center" resizable="false">
+
+                <p:scrollPanel id="panelControlesDetalle" mode="native" style="width:620px; height:350px; text-align: left">
+                    <br/>
+                    <p:panelGrid styleClass="companyHeaderGrid">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Número:" for="codigoField" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="codigoField" size="15" readonly="true" 
+                                             value="#{buscarOrdenesAction.ordenSeleccionada.codigoOrden}" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Fecha:" for="fechaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="fechaField" readonly="true"
+                                              value="#{buscarOrdenesAction.ordenSeleccionada.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </p:inputText>
+                            </p:column>                                
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Estado:" for="estadoField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="estadoField" size="15" readonly="true" 
+                                             value="#{buscarOrdenesAction.ordenSeleccionada.estado}" />
+                            </p:column>                            
+                            <p:column>
+                                <p:outputLabel value="Valor total:" for="valorTotalField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="valorTotalField" readonly="true"
+                                             value="#{buscarOrdenesAction.ordenSeleccionada.calcularValorTotal()}">
+                                    <f:convertNumber type="currency" currencyCode="COP" />
+                                </p:inputText>   
+                            </p:column>                            
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Cliente:" for="clienteField"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:inputText id="clienteField" readonly="true" style="width: 100%"
+                                             value="#{buscarOrdenesAction.ordenSeleccionada.clienteDTO.obtenerNombreCompleto()}"                                 
+                                             rendered="#{buscarOrdenesAction.ordenSeleccionada.clienteDTO != null}" />                                
+                            </p:column>
+                        </p:row>                        
+                    </p:panelGrid>
+                    <br/>
+                    <p:panel style="text-align:left; border:none;">
+                        <p:dataTable id="tablaItems" value="#{buscarOrdenesAction.ordenSeleccionada.items}" 
+                                     var="item" emptyMessage="#{mensajes['general.sinResultados']}">
+                            <f:facet name="header">
+                                <h:outputText value="Items de la orden"/>
+                            </f:facet>
+                            <p:column headerText="Número" style="font-size: 12px" width="12%">
+                                <h:outputText value="#{item.numero}" style="float:right"/>
+                            </p:column>
+                            <p:column headerText="Número" style="font-size: 12px" width="36%">
+                                <h:outputText value="#{item.productoDTO.nombreProducto}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad" style="font-size:12px" width="12%">
+                                <h:outputText value="#{item.cantidad}" style="float:right"/>
+                            </p:column>
+                            <p:column headerText="Valor unitario" style="font-size:12px" width="20%"> 
+                                <h:outputText value="#{item.productoDTO.valorTotal}" style="float:right">
+                                    <f:convertNumber type="currency" currencyCode="COP" />
+                                </h:outputText>                                
+                            </p:column>
+                            <p:column headerText="Total item" style="font-size:12px" width="20%">
+                                <h:outputText value="#{item.calcularValor()}" style="float:right">
+                                    <f:convertNumber type="currency" currencyCode="COP" />
+                                </h:outputText>                                 
+                            </p:column>
+                        </p:dataTable>                        
+                    </p:panel>
+                </p:scrollPanel>
+                
+                <p:panel style="text-align: right; text-spacing:normal; border:none;">
+                    <p:commandButton value="Cancelar orden"  
+                                     actionListener="#{buscarOrdenesAction.cancelarOrden()}"                                  
+                                     update="panelControlesDetalle,form:tablaResultados" >
+                        <p:confirm header="#{mensajes['general.confirmacion']}" 
+                                   message="Está seguro que desea cancelar la orden de compra?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                        <p:panel style="text-align: center; border:none;">
+                            <p:commandButton value="#{mensajes['general.aceptar']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="#{mensajes['general.cancelar']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>                
+                        </p:panel>
+                    </p:confirmDialog>                    
+                    <p:spacer width="5px"/>                  
+                    <p:commandButton value="#{mensajes['general.cerrar']}" immediate="true"
+                                     onclick="PF('modalDetalle').hide()" />
+                </p:panel>
+            </p:dialog> 
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>  
+

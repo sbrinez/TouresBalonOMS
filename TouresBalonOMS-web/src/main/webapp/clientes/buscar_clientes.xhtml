@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+    <ui:define name="content">  
+        <h:form id="formBusqueda">
+            <h:panelGroup>
+                <p:panel style="text-align:left; border:none;">
+                    <h4>
+                        <p:outputLabel value="#{mensajesClientes['consultarClientes.titulo']}"/>
+                    </h4>                    
+                </p:panel>
+                <p:panel style="text-align:left; border:none; width: 80%">
+                    <p:panelGrid columns="2" styleClass="companyHeaderGrid">
+                        <p:outputLabel value="Número de identificación:" for="numIdBusqueda"/>
+                        <p:inputText id="numIdBusqueda" 
+                                     value="#{buscarClientesAction.numIdentificacionBusqueda}">
+                            <pe:keyFilter mask="num"/>
+                        </p:inputText>
+                        <p:outputLabel value="Producto adquirido:" for="codigoProductoBusqueda"/>
+                        <p:inputText id="codigoProductoBusqueda" 
+                                     value="#{buscarClientesAction.codigoProductoBusqueda}">
+                            <pe:keyFilter mask="num"/>
+                        </p:inputText>                        
+                    </p:panelGrid>
+                    <p:panel style="text-align:right; border:none;">
+                        <p:commandButton value="#{mensajes['general.buscar']}" 
+                                         action="#{buscarClientesAction.buscarClientes()}" 
+                                         update="form:panelResultados"/>
+                    </p:panel> 
+                </p:panel>
+            </h:panelGroup>           
+        </h:form>
+
+        <h:form id="form">
+            <h:panelGroup>
+
+                <p:panel id="panelResultados" style="width: 80%; border:none;">
+                    <p:dataTable id="tablaResultados" value="#{buscarClientesAction.listaClientes}" var="cliente" 
+                                 emptyMessage="#{mensajes['general.sinResultados']}">
+                        <p:column headerText="Número de identificación" style="font-size: 12px" width="12%">
+                            <h:outputText value="#{cliente.numeroIdentificacion}" style="float:right"/>
+                        </p:column>
+                        <p:column headerText="Nombres" style="font-size: 12px" width="18%">
+                            <h:outputText value="#{cliente.nombres}"/>
+                        </p:column>
+                        <p:column headerText="Apeliidos" style="font-size: 12px" width="18%">
+                            <h:outputText value="#{cliente.apellidos}"/>
+                        </p:column>
+                        <p:column headerText="Celular" style="font-size: 12px" width="10%">
+                            <h:outputText value="#{cliente.celular}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Email" style="font-size: 12px" width="18%">
+                            <h:outputText value="#{cliente.email}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Categoría" style="font-size: 12px" width="14%">
+                            <h:outputText value="#{cliente.categoria}">
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="text-align:center; font-size:12px" width="10%">
+                            <f:facet name="header">
+                                <p:commandLink immediate="true"
+                                               actionListener="#{buscarClientesAction.iniciarNuevoCliente()}"
+                                               oncomplete="PF('modalDetalle').show()" update="form2:modalDetalle">
+                                    <p:graphicImage value="/resources/images/agregar.png" height="16" width="16" />
+                                </p:commandLink>                                
+                            </f:facet>
+                            <p:commandLink oncomplete="PF('modalDetalle').show()" update="form2:modalDetalle" immediate="true" 
+                                           actionListener="#{buscarClientesAction.iniciarActualizacionCliente(cliente)}">
+                                <p:graphicImage value="/resources/images/modificar.png" height="16" width="16" />
+                            </p:commandLink>
+                            <p:spacer width="10px"/>
+                            <p:commandLink update="tablaResultados"
+                                           actionListener="#{buscarClientesAction.eliminarCliente(cliente)}">
+                                <f:setPropertyActionListener value="#{cliente}" 
+                                                             target="#{buscarClientesAction.clienteSeleccionado}" />
+                                <p:graphicImage value="/resources/images/eliminar.png" height="16" width="16" />
+                                <p:confirm header="#{mensajes['general.confirmacion']}" icon="ui-icon-alert"
+                                           message="#{mensajes['general.confirmacionEliminar']}" />
+                            </p:commandLink>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                                <p:panel style="text-align: center; border:none;">
+                                    <p:commandButton value="#{mensajes['general.aceptar']}" type="button" 
+                                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="#{mensajes['general.cancelar']}" type="button" 
+                                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>                
+                                </p:panel>
+                            </p:confirmDialog>                            
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form id="form2">
+            <p:dialog dynamic="true" id="modalDetalle" header="#{mensajesClientes['detalleCliente.titulo']}" 
+                      widgetVar="modalDetalle" modal="true" position="center center" resizable="false">
+
+                <p:scrollPanel id="panelControlesDetalle" mode="native" style="width:520px; height:220px;">
+                    <br/>
+                    <p:panelGrid styleClass="companyHeaderGrid">
+
+                        <p:row>
+                            <p:column rendered="#{!buscarClientesAction.agregar}">
+                                <p:outputLabel value="Número de identificación:" for="codigoField" />
+                            </p:column>
+                            <p:column rendered="#{!buscarClientesAction.agregar}">
+                                <p:inputText id="codigoField" size="15" readonly="true" 
+                                             value="#{buscarClientesAction.clienteSeleccionado.numeroIdentificacion}" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Categoria:" for="categoriaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="categoriaField" value="#{buscarClientesAction.clienteSeleccionado.categoria}" 
+                                                 required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItems value="#{datosCacheAction.categoriasCliente}" />                            
+                                </p:selectOneMenu>                                
+                            </p:column>                                
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Nombres:" for="nombresField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="nombresField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.nombres}" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Apellidos:" for="apellidosField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="apellidosField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.apellidos}" />
+                            </p:column>                            
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Celular:" for="celularField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="celularField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.celular}" />                      
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Email:" for="emailField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="emailField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.email}" />                                 
+                            </p:column>                            
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Dirección:" for="direccionField"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:inputText id="direccionField" required="true" style="width: 100%" 
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.direccion}" />                                 
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Tarjeta de crédito:" for="numTarjetaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="numTarjetaField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.numeroTarjeta}" />  
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Franquicia:" for="franquiciaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="franquiciaField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.franquiciaTarjeta}" />                                 
+                            </p:column>                            
+                        </p:row>                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha de expiración:" for="fechaExpiracionField"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fechaExpiracionField" value="#{buscarClientesAction.clienteSeleccionado.fechaExpiracionTarjeta}" 
+                                            required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}" /> 
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Código de seguridad:" for="codigoSegField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="codigoSegField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarClientesAction.clienteSeleccionado.codigoSeguridadTarjeta}" />                                   
+                            </p:column>                            
+                        </p:row>                        
+
+                    </p:panelGrid>   
+                </p:scrollPanel>
+                <p:panel style="text-align: right; text-spacing:normal; border:none;">
+
+                    <p:commandButton value="#{mensajes['general.agregar']}" 
+                                     rendered="#{buscarClientesAction.agregar}"
+                                     actionListener="#{buscarClientesAction.agregarCliente()}"                                  
+                                     update="panelControlesDetalle,form:tablaResultados" />
+                    <p:commandButton value="#{mensajes['general.actualizar']}" 
+                                     rendered="#{not buscarClientesAction.agregar}"
+                                     actionListener="#{buscarClientesAction.actualizarCliente()}"                                  
+                                     update="panelControlesDetalle,form:tablaResultados" />
+                    <p:spacer width="5px"/>                  
+                    <p:commandButton value="#{mensajes['general.cerrar']}" immediate="true"
+                                     onclick="PF('modalDetalle').hide()" />
+                </p:panel>
+            </p:dialog> 
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>  

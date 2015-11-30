@@ -12,6 +12,8 @@ public class MenuItemDTO implements Serializable {
     private String nombre;
     
     private String urlDestino;
+    
+    private boolean controlCompleto;
 
     /**
      * @return the nombre
@@ -39,6 +41,20 @@ public class MenuItemDTO implements Serializable {
      */
     public void setUrlDestino(String urlDestino) {
         this.urlDestino = urlDestino;
+    }
+
+    /**
+     * @return the controlCompleto
+     */
+    public boolean isControlCompleto() {
+        return controlCompleto;
+    }
+
+    /**
+     * @param controlCompleto the controlCompleto to set
+     */
+    public void setControlCompleto(boolean controlCompleto) {
+        this.controlCompleto = controlCompleto;
     }
     
 }

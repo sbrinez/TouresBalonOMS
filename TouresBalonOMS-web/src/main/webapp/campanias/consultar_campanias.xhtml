@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+    <ui:define name="content">   
+        <h:form id="form">
+            <h:panelGroup>
+                <p:panel style="text-align: left; text-spacing:normal; border:none;">
+                    <h4>
+                        <p:outputLabel value="#{mensajesCampanias['consultarCampanias.titulo']}"/>
+                    </h4>                    
+                </p:panel>
+                <p:panel id="panelResultados" style="width: 70%">
+                    <p:dataTable id="tablaResultados" value="#{buscarCampaniasAction.listaCampanias}" var="campania" 
+                                 emptyMessage="#{mensajes['general.sinResultados']}">
+                        <p:column headerText="Código" style="font-size: 12px" width="15%">
+                            <h:outputText value="#{campania.codigo}" style="float:right"/>
+                        </p:column>
+                        <p:column headerText="Producto" style="font-size: 12px" width="30%">
+                            <h:outputText value="#{campania.nombreProducto}"/>
+                        </p:column>
+                        <p:column headerText="Fecha inicio de vigencia" style="font-size: 12px" width="20%">
+                            <h:outputText value="#{campania.fechaInicioVigencia}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Fecha fin de vigencia" style="font-size: 12px" width="20%">
+                            <h:outputText value="#{campania.fechaFinVigencia}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="text-align:center; font-size:12px" width="15%">
+                            <f:facet name="header">
+                                <p:commandLink immediate="true"
+                                                 actionListener="#{buscarCampaniasAction.iniciarNuevaCampania()}"
+                                                 oncomplete="PF('modalDetalle').show()" update="form2:modalDetalle">
+                                    <p:graphicImage value="/resources/images/agregar.png" height="16" width="16" />
+                                </p:commandLink>                                
+                            </f:facet>
+                            <p:commandLink oncomplete="PF('modalDetalle').show()" update="form2:modalDetalle" immediate="true" 
+                                           actionListener="#{buscarCampaniasAction.iniciarActualizacionCampania(campania)}">
+                                <p:graphicImage value="/resources/images/modificar.png" height="16" width="16" />
+                            </p:commandLink>
+                            <p:spacer width="10px"/>
+                            <p:commandLink update="tablaResultados"
+                                           actionListener="#{buscarCampaniasAction.eliminarCampania(campania)}">
+                                <f:setPropertyActionListener value="#{campania}" 
+                                                             target="#{buscarCampaniasAction.campaniaSeleccionada}" />
+                                <p:graphicImage value="/resources/images/eliminar.png" height="16" width="16" />
+                                <p:confirm header="#{mensajes['general.confirmacion']}" icon="ui-icon-alert"
+                                           message="#{mensajes['general.confirmacionEliminar']}" />
+                            </p:commandLink>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                                <p:panel style="text-align: center; border:none;">
+                                    <p:commandButton value="#{mensajes['general.aceptar']}" type="button" 
+                                                     styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="#{mensajes['general.cancelar']}" type="button" 
+                                                     styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>                
+                                </p:panel>
+                            </p:confirmDialog>                            
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+
+        <h:form id="form2">
+            <p:dialog dynamic="true" id="modalDetalle" header="#{mensajesProductos['detalleProducto.titulo']}" 
+                      widgetVar="modalDetalle" modal="true" position="center center" resizable="false">
+
+                <p:scrollPanel id="panelControlesDetalle" mode="native" style="width:340px; height:150px;">
+                    <br/>
+                    <p:panelGrid columns="2" styleClass="companyHeaderGrid">
+
+                        <p:outputLabel value="Código:" for="codigoField" rendered="#{not buscarCampaniasAction.agregar}"/>
+                        <p:inputText id="codigoField" size="10" readonly="true" rendered="#{!buscarCampaniasAction.agregar}"
+                                     value="#{buscarCampaniasAction.campaniaSeleccionada.codigo}" />
+
+                        <p:outputLabel value="Producto:" for="productoField"/>
+                        <p:inputText id="productoField" required="true"  
+                                     requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                     value="#{buscarCampaniasAction.campaniaSeleccionada.nombreProducto}" />
+
+                        <p:outputLabel value="Fecha inicio de vigencia:" for="fechaInicioField"/>
+                        <p:calendar id="fechaInicioField" value="#{buscarCampaniasAction.campaniaSeleccionada.fechaInicioVigencia}" 
+                                    size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}"/>
+
+                        <p:outputLabel value="Fecha fin de vigencia:" for="fechaFin"/>
+                        <p:calendar id="fechaFin" value="#{buscarCampaniasAction.campaniaSeleccionada.fechaFinVigencia}" 
+                                    size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}"/>
+
+                    </p:panelGrid>   
+                </p:scrollPanel>
+
+                <br/>
+                <p:panel style="text-align: right; text-spacing:normal; border:none;">
+
+                    <p:commandButton value="#{mensajes['general.agregar']}" 
+                                     rendered="#{buscarCampaniasAction.agregar}"
+                                     actionListener="#{buscarCampaniasAction.agregarCampania()}"                                  
+                                     update="panelControlesDetalle,form:tablaResultados" />
+                    <p:commandButton value="#{mensajes['general.actualizar']}" 
+                                     rendered="#{not buscarCampaniasAction.agregar}"
+                                     actionListener="#{buscarCampaniasAction.actualizarCampania()}"                                  
+                                     update="panelControlesDetalle,form:tablaResultados" />
+                    <p:spacer width="5px"/>                  
+                    <p:commandButton value="#{mensajes['general.cerrar']}" immediate="true"
+                                     onclick="PF('modalDetalle').hide()" />
+                </p:panel>
+            </p:dialog> 
+
+        </h:form>
+
+    </ui:define>
+</ui:composition>  
+

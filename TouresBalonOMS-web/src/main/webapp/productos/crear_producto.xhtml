@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+            <h:panelGroup id="controlesFormulario">
+                <p:panel style="text-align: left; text-spacing:normal; border:none;">
+                    <h4>
+                        <p:outputLabel value="#{mensajesProductos['crearProducto.titulo']}"/>
+                    </h4>                    
+                </p:panel>
+
+                <p:panelGrid styleClass="companyHeaderGrid">
+
+                    <p:row>                       
+                        <p:column>
+                            <p:outputLabel value="Nombre:" for="nombreField"/>
+                        </p:column>                         
+                        <p:column colspan="3">
+                            <p:inputText id="nombreField" size="30" required="true"  
+                                         requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                         value="#{crearProductoAction.producto.nombreProducto}" />
+                        </p:column> 
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Descripción:" for="descripcionField"/>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputTextarea id="descripcionField" style="width:100%"
+                                             value="#{crearProductoAction.producto.descripcionProducto}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Fecha del evento:" for="fechaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaField" value="#{crearProductoAction.producto.fechaEspectaculo}" 
+                                        required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                        requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Tipo de espectáculo:" for="tiposList"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="tiposList" value="#{crearProductoAction.producto.tipoEspectaculo}" 
+                                             required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{datosCacheAction.tiposEspectaculo}" />
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Ciudad origen:" for="ciudadOrigenField"/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="ciudadOrigenField" value="#{crearProductoAction.producto.ciudadOrigen}" 
+                                             required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{datosCacheAction.ciudades}" />                            
+                            </p:selectOneMenu>                            
+                        </p:column>                             
+                        <p:column>
+                            <p:outputLabel value="Ciudad destino:" for="ciudadDestinoField"/>
+                        </p:column>
+                        <p:column>                                
+                            <p:selectOneMenu id="ciudadDestinoField" value="#{crearProductoAction.producto.ciudadDestino}" 
+                                             required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{datosCacheAction.ciudades}" />                            
+                            </p:selectOneMenu>
+                        </p:column>                           
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Fecha de llegada:" for="fechaLlegadaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaLlegadaField" value="#{crearProductoAction.producto.fechaLlegada}" 
+                                        size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                        requiredMessage="#{mensajes['general.campoObligatorio']}" />                                
+                        </p:column>                             
+                        <p:column>
+                            <p:outputLabel value="Fecha de salida:" for="fechaSalidaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaSalidaField" value="#{crearProductoAction.producto.fechaSalida}" 
+                                        size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                        requiredMessage="#{mensajes['general.campoObligatorio']}" />                                
+                        </p:column>                          
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Valor espectáculo:" for="valorEspectaculoField"/>
+                        </p:column>
+                        <p:column> 
+                            <pe:inputNumber id="valorEspectaculoField" decimalPlaces="2" symbol="$" required="true" 
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                            value="#{crearProductoAction.producto.valorEspectaculo}" />  
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Valor hospedaje:" for="valorHospedajeField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorHospedajeField" decimalPlaces="2" symbol="$" required="true" 
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                            value="#{crearProductoAction.producto.valorHospedaje}" />                                  
+                        </p:column>                            
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Valor transporte:" for="valorTransporteField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorTransporteField" decimalPlaces="2" symbol="$" required="true" 
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                            value="#{crearProductoAction.producto.valorTransporte}" />                                  
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Valor total:" for="valorTotalField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorTotalField" decimalPlaces="2" symbol="$" required="true" 
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                            value="#{crearProductoAction.producto.valorTotal}" />                                 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Imagen:" for="imagenField"/>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:fileUpload id="imagenField" multiple="false" mode="advanced" skinSimple="true" label="Seleccione.." 
+                                          uploadLabel="#{mensajes['general.cargarArchivo']}" cancelLabel="#{mensajes['general.cancelar']}"
+                                          required="true" requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" invalidFileMessage="#{mensajesProductos['crearProducto.errorTipoArchivo']}"
+                                          sizeLimit="524288" invalidSizeMessage="#{mensajesProductos['crearProducto.errorTamanoArchivo']}"
+                                          fileUploadListener="#{crearProductoAction.handleFileUpload}" update="nombreArchivoPanel" /> 
+
+                            <p:outputPanel id="nombreArchivoPanel" >
+                                <h:outputText id="nombreArchivo" value="#{crearProductoAction.archivoImagen.fileName}" 
+                                              rendered="#{crearProductoAction.archivoImagen != null and 
+                                                          crearProductoAction.archivoImagen.fileName != null}"/>
+                            </p:outputPanel>
+
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>  
+                <br/>
+                <p:panel style="text-align: center; text-spacing:normal; border:none;">
+                    <p:commandButton value="#{mensajes['general.agregar']}" update="controlesFormulario"
+                                     actionListener="#{crearProductoAction.agregarProducto()}"/> 
+                </p:panel>                 
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition> 
+

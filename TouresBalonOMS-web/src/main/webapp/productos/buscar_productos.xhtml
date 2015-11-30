@@ -5,45 +5,224 @@
                 xmlns:f="http://java.sun.com/jsf/core"  
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/templates/default/template.xhtml">
+
     <ui:define name="content">   
         <h:form id="form">
-            <p:layout fullPage="true">
-                <p:layoutUnit id="layoutUnit" position="center" header="Búsqueda de productos" collapsible="false" >
+            <p:panelGrid id="grid" columns="2">
+                <f:facet name="header">
+                    Búsqueda de productos
+                </f:facet>
+                <p:inputText id="productosField" value="#{buscarProductosAction.criterioBusqueda}" size="60"/>
+                <p:commandButton value="#{mensajes['general.buscar']}" action="#{buscarProductosAction.buscarProductos()}" update="dataGrid"/>                        
+            </p:panelGrid>            
 
-                    <p:panelGrid id="grid" columns="2" layout="grid">
+            <p:dataGrid id="dataGrid" value="#{buscarProductosAction.listaProductos}" var="producto" columns="4" rows="10" layout="grid" >
 
-                        <p:inputText id="productosField" value="#{buscarProductosAction.criterioBusqueda}" />
-                        <p:commandButton value="Buscar" action="#{buscarProductosAction.buscarProductos()}" update="dataGrid"/>
-                        <p:graphicImage value="https://drive.google.com/open?id=0Bx_09pVkCT3gbk13U2xnWVQ1Snc"/>
+                <f:facet name="header">
+                    <h:outputText value="#{mensajes['general.resultadosBusqueda']}"/>
+                </f:facet>
 
-                    </p:panelGrid>            
-
-                    <p:dataGrid id="dataGrid" value="#{buscarProductosAction.listaProductos}" var="producto" columns="4" rows="10">
-
-                        <f:facet name="header">
-                            Resultados de la búsqueda de productos
-                        </f:facet>
-
-                        <p:panel header="#{producto.nombreProducto}" style="text-align:center">
-                            <h:panelGrid columns="2">
-                                <h:outputLabel value="Ciudad"/>
-                                <h:outputText value="#{producto.ciudadDestino}" />
-                                <h:outputLabel value="Fecha del espectáculo"/>
-                                <p:calendar value="#{producto.fechaEspectaculo.getTime()}" pattern="MM/dd/yyyy" disabled="true" />
-
-                                <p:commandLink title="Ver detalle del producto" 
-                                               action="#{buscarProductosAction.consultarDetalleProducto()}">
-                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                    <f:setPropertyActionListener value="#{producto}" target="#{buscarProductosAction.productoSeleccionado}" />
-                                </p:commandLink>
-                            </h:panelGrid>
-                        </p:panel>                        
-
-                    </p:dataGrid>
-                </p:layoutUnit>
-            </p:layout>
+                <p:panel header="#{producto.nombreProducto}" style="text-align:center; font-size: xx-small" >
+                    <p:commandLink action="#{buscarProductosAction.consultarDetalleProducto()}" oncomplete="PF('modalDetalle').show()"
+                                   update="form2:panelControlesDetalle">
+                        <f:setPropertyActionListener value="#{producto}" target="#{buscarProductosAction.productoSeleccionado}" />
+                        <p:graphicImage value="#{producto.urlFoto}" height="120" width="120" />
+                    </p:commandLink>
+                    <h:panelGrid columns="2" style="font-size: x-small;" cellpadding="5" cellspacing="5">
+                        <p:outputLabel value="Ciudad:" />
+                        <p:inputText value="#{producto.ciudadDestino}" readonly="true"/>
+                        <p:outputLabel value="Fecha del espectáculo:"/>
+                        <p:calendar value="#{producto.fechaEspectaculo}" pattern="dd/MM/yyyy" readonly="true"/>
+                    </h:panelGrid>
+                    <h:panelGroup layout="block">
+                        <p:scrollPanel mode="native" style="width: 100%; text-align: left">
+                            <h:outputText value="#{producto.descripcionProducto}"/>
+                        </p:scrollPanel>
+                    </h:panelGroup>
+                </p:panel>                        
+            </p:dataGrid>
         </h:form>
-    </ui:define>
+
+        <h:form id="form2">
+            <p:dialog dynamic="true" id="modalDetalle" header="#{mensajesProductos['detalleProducto.titulo']}" 
+                      widgetVar="modalDetalle" modal="true" position="center center" resizable="false">
+                <p:scrollPanel id="panelControlesDetalle" mode="native" style="width:600px; height:400px">
+                    <br/>
+                    <p:graphicImage rendered="#{buscarProductosAction.productoSeleccionado.urlFoto != null}"
+                                    value="#{buscarProductosAction.productoSeleccionado.urlFoto}"/>
+                    <br/>
+                    <br/>
+                    <p:panelGrid styleClass="companyHeaderGrid">
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Código:" for="codigoField"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="codigoField" size="10" readonly="true"
+                                             value="#{buscarProductosAction.productoSeleccionado.codigoProducto}" />
+                            </p:column>                        
+                            <p:column>
+                                <p:outputLabel value="Nombre:" for="nombreField"/>
+                            </p:column>                         
+                            <p:column>
+                                <p:inputText id="nombreField" required="true"  
+                                             requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                             value="#{buscarProductosAction.productoSeleccionado.nombreProducto}" />
+                            </p:column> 
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Descripción:" for="descripcionField"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <p:inputTextarea id="descripcionField" style="width:100%"
+                                                 value="#{buscarProductosAction.productoSeleccionado.descripcionProducto}" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha del evento:" for="fechaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fechaField" value="#{buscarProductosAction.productoSeleccionado.fechaEspectaculo}" 
+                                            required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Tipo de espectáculo:" for="tipoField"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="tipoField" value="#{buscarProductosAction.productoSeleccionado.tipoEspectaculo}" 
+                                                 required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItems value="#{datosCacheAction.tiposEspectaculo}" />
+                                </p:selectOneMenu>
+                            </p:column>                            
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Ciudad origen:" for="ciudadOrigenField"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="ciudadOrigenField" value="#{buscarProductosAction.productoSeleccionado.ciudadOrigen}" 
+                                                 required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItems value="#{datosCacheAction.ciudades}" />
+                                </p:selectOneMenu>                                
+                            </p:column>                             
+                            <p:column>
+                                <p:outputLabel value="Ciudad destino:" for="ciudadDestinoField"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="ciudadDestinoField" value="#{buscarProductosAction.productoSeleccionado.ciudadDestino}" 
+                                                 required="true" requiredMessage="#{mensajes['general.campoObligatorio']}">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItems value="#{datosCacheAction.ciudades}" />
+                                </p:selectOneMenu>                                 
+                            </p:column>                           
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha de llegada:" for="fechaLlegadaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fechaLlegadaField" value="#{buscarProductosAction.productoSeleccionado.fechaLlegada}" 
+                                            size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}" />                                
+                            </p:column>                             
+                            <p:column>
+                                <p:outputLabel value="Fecha de salida:" for="fechaSalidaField"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fechaSalidaField" value="#{buscarProductosAction.productoSeleccionado.fechaSalida}" 
+                                            size="12" required="true" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                            requiredMessage="#{mensajes['general.campoObligatorio']}" />                                
+                            </p:column>                          
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Valor espectáculo:" for="valorEspectaculoField"/>
+                            </p:column>
+                            <p:column>
+                                <pe:inputNumber id="valorEspectaculoField" decimalPlaces="2" symbol="$" required="true" 
+                                                requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                                value="#{buscarProductosAction.productoSeleccionado.valorEspectaculo}" />                                 
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Valor hospedaje:" for="valorHospedajeField"/>
+                            </p:column>
+                            <p:column>
+                                <pe:inputNumber id="valorHospedajeField" decimalPlaces="2" symbol="$" required="true" 
+                                                requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                                value="#{buscarProductosAction.productoSeleccionado.valorHospedaje}" />                                 
+                            </p:column>                            
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Valor transporte:" for="valorTransporteField"/>
+                            </p:column>
+                            <p:column>
+                                <pe:inputNumber id="valorTransporteField" decimalPlaces="2" symbol="$" required="true" 
+                                                requiredMessage="#{mensajes['general.campoObligatorio']}"
+                                                value="#{buscarProductosAction.productoSeleccionado.valorTransporte}" />                                 
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Valor total:" for="valorTotalField"/>
+                            </p:column>
+                            <p:column>
+                                <pe:inputNumber id="valorTotalField" decimalPlaces="2" symbol="$" readonly="true" 
+                                                value="#{buscarProductosAction.productoSeleccionado.valorTotal}" />                                 
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>   
+                </p:scrollPanel>
+                
+                <br/>
+                
+                <p:panel style="text-align:right; text-spacing:normal; border:none;">
+                    
+                    <p:commandButton value="#{mensajes['general.eliminar']}" oncomplete="PF('modalDetalle').hide()" 
+                                     rendered="true" 
+                                     actionListener="#{buscarProductosAction.eliminarProducto()}" update="form:dataGrid">
+                        <p:confirm header="#{mensajes['general.confirmacion']}" 
+                                   message="#{mensajes['general.confirmacionEliminar']}" icon="ui-icon-alert"/>
+                    </p:commandButton> 
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                        <p:panel style="text-align: center; border:none;">
+                            <p:commandButton value="#{mensajes['general.aceptar']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="#{mensajes['general.cancelar']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>                
+                        </p:panel>
+                    </p:confirmDialog>
+                    
+                    <p:spacer width="5px"/>
+                    
+                    <p:commandButton value="#{mensajes['general.actualizar']}"
+                                     rendered="true"
+                                     actionListener="#{buscarProductosAction.actualizarProducto()}" 
+                                     oncomplete="PF('modalDetalle').show()" 
+                                     update="form:dataGrid">
+                    </p:commandButton>
+                    
+                    <p:spacer width="5px"/>
+                    
+                    <p:commandButton value="#{mensajes['general.cerrar']}" 
+                                     onclick="PF('modalDetalle').hide()" />
+                    
+                </p:panel>
+                <br/>
+            </p:dialog> 
+        </h:form>
+    </ui:define>     
 </ui:composition>  
+
 

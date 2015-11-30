@@ -11,21 +11,29 @@
             <title>TouresBalon-OMS</title>
         </f:facet>
     </h:head>
-    <h:body>
-            <h:form>
-                <p:layout fullPage="true">
-                    <p:layoutUnit position="center" size="175" header="Sistema de Gestión de Ordenes" collapsible="false" >
-                        
-                        <p:panelGrid id="grid" columns="3" layout="grid" >
-                            
-                            <h:outputLabel value="Nombre de usuario" for="usernameField"/>
-                            <p:inputText id="usernameField" label="Nombre de usuario" size="20" 
+    <style type="text/css">
+        .ui-widget,.ui-widget .ui-widget {
+            font-size: 95% !important;
+        }
+    </style>    
+    <h:body>      
+        <div align="center">
+            <p:panel style="width: 50%" header="Bienvenido al Sistema de Gestión de Ordenes" styleClass="companyHeaderGrid">         
+                <h:form>
+                    <p:panel styleClass="companyHeaderGrid">
+                        <h:graphicImage value="/resources/images/LogoTouresBalon.png" width="120px" height="100px"/>
+                    </p:panel>
+                    <div align="left">
+                        <p:panelGrid id="grid" columns="3" layout="grid">
+
+                            <p:outputLabel value="Nombre de usuario" for="usernameField"/>
+                            <p:inputText id="usernameField" size="20" 
                                          requiredMessage="Este campo es requerido"
                                          required="true" value="#{loginAction.username}"/>
                             <p:message for="usernameField"/>
 
-                            <h:outputLabel value="Contraseña" for="passwordField"/>
-                            <p:password id="passwordField" label="Contraseña" size="20" 
+                            <p:outputLabel value="Contraseña" for="passwordField"/>
+                            <p:password id="passwordField" size="20" 
                                         required="true" value="#{loginAction.password}"
                                         requiredMessage="Este campo es requerido"/>
                             <p:message for="passwordField"/>
@@ -33,9 +41,9 @@
                             <p:commandButton value="Ingresar" action="#{loginAction.login()}" update="grid"/>
 
                         </p:panelGrid>
-
-                    </p:layoutUnit>
-                </p:layout>
-            </h:form>
+                    </div>
+                </h:form>
+            </p:panel>
+        </div>
     </h:body>
 </html>

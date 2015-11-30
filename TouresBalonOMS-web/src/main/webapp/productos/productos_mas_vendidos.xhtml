@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+    <ui:define name="content">   
+        <h:form id="form">
+            <h:panelGroup>
+                <p:panel style="text-align: left; text-spacing:normal; border:none;">
+                    <h4>
+                        <p:outputLabel value="#{mensajesProductos['rankingProductos.titulo']}"/>
+                    </h4>                    
+                </p:panel>
+                <h:panelGroup id="panelFechas">
+                    <p:panelGrid columns="5" styleClass="companyHeaderGrid">
+                        <p:outputLabel value="Fecha inicial:" for="fechaInicialField"/>
+                        <p:calendar id="fechaInicialField" value="#{rankingProductosAction.fechaInicial}" 
+                                    required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button" 
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                        <p:outputLabel value="Fecha inicial:" for="fechaFinalField"/>
+                        <p:calendar id="fechaFinalField" value="#{rankingProductosAction.fechaFinal}" 
+                                    required="true" size="12" pattern="dd/MM/yyyy" mask="true" showOn="button"
+                                    requiredMessage="#{mensajes['general.campoObligatorio']}" />
+                        <p:commandButton value="#{mensajes['general.consultar']}" update="panelFechas, tablaResultados" 
+                                         action="#{rankingProductosAction.consultarRankingProductosMasVendidos()}"/>
+                    </p:panelGrid>
+                </h:panelGroup>
+                <br/>
+                <p:panel id="panelResultados" style="width: 80%">
+                    <p:dataTable id="tablaResultados" value="#{rankingProductosAction.productos}" var="producto"
+                                 emptyMessage="#{mensajes['general.sinResultados']}">
+                        <p:column headerText="Código" style="font-size: 12px" width="10%">
+                            <h:outputText value="#{producto.codigoProducto}" style="float:right"/>
+                        </p:column>
+                        <p:column headerText="Nombre" style="font-size: 12px" width="25%">
+                            <h:outputText value="#{producto.nombreProducto}"/>
+                        </p:column>
+                        <p:column headerText="Ciudad destino" style="font-size: 12px" width="20%">
+                            <h:outputText value="#{producto.ciudadDestino}"/>
+                        </p:column>
+                        <p:column headerText="Fecha espectáculo" style="font-size: 12px" width="20%">
+                            <h:outputText value="#{producto.fechaEspectaculo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Valor total" style="font-size: 12px" width="15%">
+                            <h:outputText value="#{producto.valorTotal}" style="float:right">
+                                <f:convertNumber type="currency" currencyCode="COP" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Detalles" style="text-align:center; font-size:12px" width="10%">
+                            <p:commandLink action="#{rankingProductosAction.consultarDetallesProducto()}" 
+                                           oncomplete="PF('modalDetalle').show()" update="panelControlesDetalle">
+                                <f:setPropertyActionListener value="#{producto}" target="#{rankingProductosAction.productoSeleccionado}" />
+                                <p:graphicImage value="/resources/images/detalles.png" height="16" width="16" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+
+        <p:dialog dynamic="true" id="modalDetalle" header="#{mensajesProductos['detalleProducto.titulo']}" 
+                  widgetVar="modalDetalle" modal="true" position="center center" resizable="false">
+            <p:scrollPanel id="panelControlesDetalle" mode="native" style="width:600px; height:430px">
+                <br/>
+                <p:graphicImage rendered="#{rankingProductosAction.productoSeleccionado.urlFoto != null}"
+                                value="#{rankingProductosAction.productoSeleccionado.urlFoto}"/>
+                <br/>
+                <br/>
+                <br/>
+                <p:panelGrid styleClass="companyHeaderGrid">
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Código:" for="codigoField"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="codigoField" size="10" readonly="true"
+                                         value="#{rankingProductosAction.productoSeleccionado.codigoProducto}" />
+                        </p:column>                        
+                        <p:column>
+                            <p:outputLabel value="Nombre:" for="nombreField"/>
+                        </p:column>                         
+                        <p:column>
+                            <p:inputText id="nombreField" readonly="true"                                               
+                                         value="#{rankingProductosAction.productoSeleccionado.nombreProducto}" />
+                        </p:column> 
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Descripción:" for="descripcionField"/>
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:inputTextarea id="descripcionField" readonly="true" style="width: 100%"
+                                             value="#{rankingProductosAction.productoSeleccionado.descripcionProducto}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Fecha del evento:" for="fechaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaField" value="#{rankingProductosAction.productoSeleccionado.fechaEspectaculo}" 
+                                        readonly="true" size="12" pattern="dd/MM/yyyy" mask="true" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Tipo de espectáculo:" for="tipoField"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="tipoField" readonly="true" 
+                                         value="#{rankingProductosAction.productoSeleccionado.tipoEspectaculo}" />
+                        </p:column>                            
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Ciudad origen:" for="ciudadOrigenField"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="ciudadOrigenField" readonly="true" 
+                                         value="#{rankingProductosAction.productoSeleccionado.ciudadOrigen}" />
+                        </p:column>                             
+                        <p:column>
+                            <p:outputLabel value="Ciudad destino:" for="ciudadDestinoField"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="ciudadDestinoField" readonly="true" 
+                                         value="#{rankingProductosAction.productoSeleccionado.ciudadDestino}" />                                
+                        </p:column>                           
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Fecha de llegada:" for="fechaLlegadaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaLlegadaField" value="#{rankingProductosAction.productoSeleccionado.fechaLlegada}" 
+                                        size="12" readonly="true" readonlyInput="true" pattern="dd/MM/yyyy" mask="true" />                                
+                        </p:column>                             
+                        <p:column>
+                            <p:outputLabel value="Fecha de salida:" for="fechaSalidaField"/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="fechaSalidaField" value="#{rankingProductosAction.productoSeleccionado.fechaSalida}" 
+                                        size="12" readonly="true" readonlyInput="true" pattern="dd/MM/yyyy" mask="true" />                                
+                        </p:column>                          
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Valor espectáculo:" for="valorEspectaculoField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorEspectaculoField" decimalPlaces="2" symbol="$" readonly="true" 
+                                            value="#{rankingProductosAction.productoSeleccionado.valorEspectaculo}" />                                 
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Valor hospedaje:" for="valorHospedajeField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorHospedajeField" decimalPlaces="2" symbol="$" readonly="true" 
+                                            value="#{rankingProductosAction.productoSeleccionado.valorHospedaje}" />                                 
+                        </p:column>                            
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Valor transporte:" for="valorTransporteField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorTransporteField" decimalPlaces="2" symbol="$" readonly="true" 
+                                            value="#{rankingProductosAction.productoSeleccionado.valorTransporte}" />                                 
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Valor total:" for="valorTotalField"/>
+                        </p:column>
+                        <p:column>
+                            <pe:inputNumber id="valorTotalField" decimalPlaces="2" symbol="$" readonly="true" 
+                                            value="#{rankingProductosAction.productoSeleccionado.valorTotal}" />                                 
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>  
+                <br/>
+            </p:scrollPanel>
+
+            <br/>
+
+            <p:panel style="text-align: right; text-spacing:normal; border:none;">
+                <p:commandButton value="#{mensajes['general.cerrar']}" 
+                                 onclick="PF('modalDetalle').hide()" />
+            </p:panel>
+            <br/>
+        </p:dialog> 
+
+    </ui:define>
+</ui:composition>  
+

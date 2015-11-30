@@ -3,9 +3,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:graphicImage value="resources/images/LogoTouresBalon.png" width="140px" height="120px"/>
+    <h:graphicImage value="/resources/images/LogoTouresBalon.png" width="100px" height="80px"/>
     <p:outputLabel>
-        <p:outputLabel value="Sistema de Administración de Ordenes - OMS"/>
+        <h2>
+            <p:outputLabel value="Sistema de Administración de Ordenes - OMS"/>
+        </h2>
     </p:outputLabel>
 
     <nav class="navbar navbar-inverse" role="navigation">
@@ -21,7 +23,7 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <h:outputText value="#{loginAction.menuHtml}" escape="false" />
+                <h:outputText value="#{menuAction.menuHtml}" escape="false" />
             </div>
         </div>
     </nav>

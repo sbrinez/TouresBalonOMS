@@ -74,7 +74,7 @@ public class CacheResourceLoader {
     /**
      * Global instance of the scopes required by this quickstart.
      */
-    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
+    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 
     /**
      * Bloque de inicialización que permite cargar los menus de cada rol desde
@@ -105,7 +105,7 @@ public class CacheResourceLoader {
                     BarraMenusDTO barraMenusDTO = new BarraMenusDTO();
                     NodeList menusNodeList = menusNodo.getChildNodes();
                     if (menusNodeList != null) {
-                        List<MenuDTO> menusDTO = new ArrayList<MenuDTO>();
+                        List<MenuDTO> menusDTO = new ArrayList<>();
                         for (int j = 0; j < menusNodeList.getLength(); j++) {
                             Node menuNode = menusNodeList.item(j);
                             if (menuNode.getNodeType() != Node.ELEMENT_NODE) {
@@ -115,7 +115,7 @@ public class CacheResourceLoader {
                             menuDTO.setNombre(menuNode.getAttributes().getNamedItem("nombre").getTextContent());
                             NodeList menuItemNodes = menuNode.getChildNodes();
                             if (menuItemNodes != null) {
-                                List<MenuItemDTO> menuItemsDTO = new ArrayList<MenuItemDTO>();
+                                List<MenuItemDTO> menuItemsDTO = new ArrayList<>();
                                 for (int k = 0; k < menuItemNodes.getLength(); k++) {
                                     Node menuItemNode = menuItemNodes.item(k);
                                     if (menuItemNode.getNodeType() != Node.ELEMENT_NODE) {
@@ -124,6 +124,13 @@ public class CacheResourceLoader {
                                     MenuItemDTO menuItemDTO = new MenuItemDTO();
                                     menuItemDTO.setNombre(menuItemNode.getAttributes().getNamedItem("nombre").getTextContent());
                                     menuItemDTO.setUrlDestino(menuItemNode.getAttributes().getNamedItem("urlDestino").getTextContent());
+                                    System.out.println("Estableciendo permisos de la URL "+menuItemDTO.getUrlDestino());
+                                    if (menuItemNode.getAttributes().getNamedItem("fullAccess") != null) {
+                                        System.out.println("Atributo fullAccess encontrado con valor: "+
+                                                menuItemNode.getAttributes().getNamedItem("fullAccess").getTextContent());
+                                        menuItemDTO.setControlCompleto(Boolean.parseBoolean(
+                                                menuItemNode.getAttributes().getNamedItem("fullAccess").getTextContent()));
+                                    }
                                     menuItemsDTO.add(menuItemDTO);
                                 }
                                 menuDTO.setItems(menuItemsDTO);
@@ -164,9 +171,9 @@ public class CacheResourceLoader {
             Credential credential = new AuthorizationCodeInstalledApp(
                     flow, new LocalServerReceiver()).authorize("user");
             
-            return new Drive.Builder(
-                    HTTP_TRANSPORT, JSON_FACTORY, credential)
+            return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME).build();
+            
         } catch (IOException ex) {
             Logger.getLogger(CacheResourceLoader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (GeneralSecurityException ex) {

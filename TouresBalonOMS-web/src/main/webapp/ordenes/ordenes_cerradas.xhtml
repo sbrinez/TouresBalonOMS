@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" 
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/templates/default/template.xhtml">
+    
+    <ui:define name="content">  
+        <h:form id="formBusqueda">
+            <h:panelGroup>
+                <p:panel style="text-align:left; border:none;">
+                    <h4>
+                        <p:outputLabel value="Ordenes cerradas por mes"/>
+                    </h4>                    
+                </p:panel>
+                <p:panel id="panelResultados" style="width: 50%; border:none;">
+                    <p:dataTable id="tablaResultados" value="#{ordenesPorMesAction.listaOrdenesPorMes}" var="ordenesPorMes" 
+                                 emptyMessage="#{mensajes['general.sinResultados']}">
+                        
+                        <p:column headerText="Mes" style="font-size: 12px" width="30%">
+                            <h:outputText value="#{ordenesPorMes.mes}"/>
+                        </p:column>
+                        <p:column headerText="Número de ordenes" style="text-align:right; font-size:12px" width="30%">
+                            <h:outputText value="#{ordenesPorMes.numeroOrdenes}" />
+                        </p:column>
+                        <p:column headerText="Total facturado" style="font-size:12px" width="40%">
+                            <h:outputText value="#{ordenesPorMes.totalFactutado}" style="float:right">
+                                <f:convertNumber type="currency" currencyCode="COP" />
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>                
+            </h:panelGroup> 
+        </h:form>
+    </ui:define>
+</ui:composition>  
+
